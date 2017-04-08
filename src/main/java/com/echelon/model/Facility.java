@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Facility {
 	@Id
@@ -16,6 +18,7 @@ public class Facility {
 	private Long id;
 	private String name;
 	
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "facility")
 	private List<Queue> queues;
 	public Facility() {

@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Customer {
 	@Id
@@ -15,6 +17,7 @@ public class Customer {
 	private String name;
 	private Long queueNumber;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="queue_id")
 	private Queue queue;

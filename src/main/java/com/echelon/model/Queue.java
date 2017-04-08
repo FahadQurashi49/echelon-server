@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Queue {
 	@Id
@@ -19,11 +21,13 @@ public class Queue {
 	private String name;
 	private Boolean isRunning;
 	private Long currentNumber;
-	
+	// add cascade for remove
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="facility_id", nullable = false)
 	private Facility facility;
 	
+	@JsonIgnore
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="queue")
 	private List<Customer> customers;
 	

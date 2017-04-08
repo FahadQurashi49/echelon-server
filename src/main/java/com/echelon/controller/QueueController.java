@@ -1,24 +1,56 @@
 package com.echelon.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.echelon.dao.QueueRepository;
-import com.echelon.model.Facility;
 import com.echelon.model.Queue;
+import com.echelon.services.QueueService;
 
 @RestController
 public class QueueController {
 	@Autowired
-	private QueueRepository queueRepository;
+	private QueueService queueService;
 	
-	@RequestMapping(method=RequestMethod.POST, value="facility/{id}/queue")
-	public void addQueue(@RequestBody Queue queue, @PathVariable Long id) {
-		queue.setFacility(new Facility(id));
-		queueRepository.save(queue);
+	/////////////////////////////////CRUD Requests\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	
+	@RequestMapping(method=RequestMethod.POST, value="facility/{facilityId}/queue")
+	public void addQueue(@RequestBody Queue queue, @PathVariable Long facilityId) {
+		queueService.addQueue(facilityId, queue);
 	}
+	
+	@RequestMapping("/facility/{facilityId}/queue/{queueId}")
+	public Queue getQueue(@PathVariable Long facilityId, @PathVariable Long queueId) {
+		return queueService.getQueue(queueId);
+	}
+	@RequestMapping( method=RequestMethod.PUT, value="/facility/{facilityId}/queue")
+	public void updateQueue(@PathVariable Long facilityId, @RequestBody Queue queue) {
+		queueService.updateQueue(facilityId, queue);
+	}
+	@RequestMapping( method=RequestMethod.DELETE, value="/facility/{facilityId}/queue/{queueId}")
+	public void deleteQueue(@PathVariable Long facilityId, @PathVariable Long queueId) {
+		queueService.deleteQueue(queueId);
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, value="facility/{facilityId}/queue")
+	public Page<Queue> getAllQueues (
+			@PathVariable Long facilityId,
+			@RequestParam(required=false, defaultValue="0", value="page") int page, 
+			@RequestParam(required=false, defaultValue="10", value="size" ) int size) {
+		return queueService.getAllQueues(facilityId, page, size);
+	}
+	
+	/////////////////////////////////Business logic Requests\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	
+	@RequestMapping(method=RequestMethod.GET, value="facility/{facilityId}/queue/{queueId}/run")
+	public Queue runQueue(@PathVariable Long facilityId, @PathVariable Long queueId) {
+		return queueService.runQueue(facilityId, queueId);		
+	}
+	
 }

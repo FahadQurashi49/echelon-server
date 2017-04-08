@@ -13,7 +13,7 @@ public class FacilityService {
 	@Autowired
 	private FacilityRepository facilityRepository;
 	
-	public Page<Facility> getAllFacility(int pageNo, int size) {		
+	public Page<Facility> getAllFacilities(int pageNo, int size) {		
 		return 
 			facilityRepository.findAll(new PageRequest(pageNo, size));
 	}

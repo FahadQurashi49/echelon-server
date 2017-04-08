@@ -35,12 +35,11 @@ public class FacilityController {
 		facilityService.deleteFacility(id);
 	}
 	
-	@RequestMapping(value="facility", 
-			method=RequestMethod.GET)
-	public Page<Facility> getAllFacility(
+	@RequestMapping(method=RequestMethod.GET, value="facility")
+	public Page<Facility> getAllFacilities(
 			@RequestParam(required=false, defaultValue="0", value="page") int page, 
 			@RequestParam(required=false, defaultValue="10", value="size" ) int size) {
-		return facilityService.getAllFacility(page, size);
+		return facilityService.getAllFacilities(page, size);
 	}
 	
 	
