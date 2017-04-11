@@ -7,11 +7,15 @@ import org.springframework.stereotype.Service;
 
 import com.echelon.dao.FacilityRepository;
 import com.echelon.model.Facility;
+import com.echelon.response.Messages;
 
 @Service
 public class FacilityService {
 	@Autowired
 	private FacilityRepository facilityRepository;
+	
+	@Autowired
+    Messages messages;
 	
 	public Page<Facility> getAllFacilities(int pageNo, int size) {		
 		return 
@@ -23,6 +27,7 @@ public class FacilityService {
 	}
 	
 	public Facility getFacility (Long facilityId) {
+		System.out.println(messages.get("default.title"));
 		return 
 			facilityRepository.findOne(facilityId);
 	}

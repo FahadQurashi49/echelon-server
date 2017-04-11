@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.echelon.dao.QueueRepository;
 import com.echelon.model.Queue;
+import com.echelon.response.Response;
 import com.echelon.services.QueueService;
 
 @RestController
@@ -49,7 +50,7 @@ public class QueueController {
 	/////////////////////////////////Business logic Requests\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 	
 	@RequestMapping(method=RequestMethod.GET, value="facility/{facilityId}/queue/{queueId}/run")
-	public Queue runQueue(@PathVariable Long facilityId, @PathVariable Long queueId) {
+	public Response<Queue> runQueue(@PathVariable Long facilityId, @PathVariable Long queueId) {
 		return queueService.runQueue(facilityId, queueId);		
 	}
 	
