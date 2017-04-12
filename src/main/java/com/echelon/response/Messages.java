@@ -8,16 +8,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.Locale;
 
-/**
- * Helper to simplify accessing i18n messages in code.
- * 
- * This finds messages automatically found from src/main/resources (files named messages_*.properties)
- * 
- * This example uses hard-coded English locale.
- *
- * @author Joni Karppinen
- * @since 2015-11-02
- */
 @Component
 public class Messages {
 
