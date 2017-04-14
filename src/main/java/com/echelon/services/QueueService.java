@@ -48,37 +48,32 @@ public class QueueService {
 	
 /////////////////////////////////Business logic\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 	
+	private String getMsg(String msgId) {
+		return messages.get(msgId);
+	}
+	
 	public Response<Queue> runQueue(Long facilityId, Long queueId) {
-		Response<Queue> resp = new Response<>();
+		Response<Queue> resp= null;
 		Queue queue = queueRepository.findByIdAndFacilityId(queueId, facilityId);		
 		if (queue != null) {
 			List<Queue> queues = queueRepository.findByFacilityIdAndIsRunning(facilityId, true);
 			if (queues.size() == 0) {			
 				queue.setIsRunning(true);				
 				updateQueue(facilityId, queue);
-				
-				resp.setData(queue);
-				resp.setMessage(messages.get("queue.run.running"));
+				resp = new Response<>(getMsg("queue.run.running"), queue);				
 			} else if (queues.size() == 1) {
 				queue = queues.get(0);				
+				resp = new Response<>(Response.CONFLICT, getMsg("queue.run.conflict"), queue);
 				
-				resp.setData(queue);
-				resp.setMessage(messages.get("queue.run.conflict"));
-				resp.setStatusCode(Response.CONFLICT);
 			} else if (queues.size() > 1) {
 				// TODO: handle error
 				System.out.println("someone has messed up with the system");
 				System.out.println("more than one queue is running of facilityId: " + facilityId);
 				
-				
-				resp.setMessage(messages.get("queue.run.multiple"));
-				resp.setStatusCode(Response.ERROR);
-				resp.setData(null);
+				resp = new Response<>(Response.ERROR, getMsg("queue.run.multiple"));
 			}
 		} else {
-			resp.setData(null);
-			resp.setMessage(messages.get("queue.run.not_found"));
-			resp.setStatusCode(Response.NOT_FOUND);			
+			resp = new Response<>(Response.NOT_FOUND, getMsg("queue.run.not_found"));
 		}
 		
 		// TODO: handle all error

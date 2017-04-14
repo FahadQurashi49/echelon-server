@@ -13,11 +13,16 @@ public class Response<T> implements StatusCodes{
 		this.message = message;
 		this.data = data;
 	}
+	public Response(Integer statusCode, String message) {
+		this.statusCode = statusCode;
+		this.message = message;		
+	}
 	public Response(Integer statusCode, String message, T data) {
 		this.statusCode = statusCode;
 		this.message = message;
 		this.data = data;
 	}
+	
 	public Integer getStatusCode() {
 		return statusCode;
 	}
