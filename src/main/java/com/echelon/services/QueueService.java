@@ -27,19 +27,19 @@ public class QueueService {
 			queueRepository.findByFacilityId(facilityId, new PageRequest(pageNo, size));
 	}
 	
-	public void addQueue(Long facilityId, Queue queue) {
+	public Response<Queue> addQueue(Long facilityId, Queue queue) {
 		queue.setFacility(new Facility(facilityId));
-		queueRepository.save(queue);
+		return new Response<Queue>(queueRepository.save(queue)) ;
 	}
 	
-	public Queue getQueue (Long queueId) {
+	public Response<Queue> getQueue (Long queueId) {
 		return 
-			queueRepository.findOne(queueId);
+			new Response<Queue>(queueRepository.findOne(queueId));
 	}
 	
-	public void updateQueue(Long facilityId, Queue queue) {
+	public Response<Queue> updateQueue(Long facilityId, Queue queue) {
 		queue.setFacility(new Facility(facilityId));
-		queueRepository.save(queue);
+		return new Response<Queue>(queueRepository.save(queue));
 	}
 	
 	public void deleteQueue(Long queueId) {
@@ -73,13 +73,8 @@ public class QueueService {
 				resp = new Response<>(Response.ERROR, getMsg("queue.run.multiple"));
 			}
 		} else {
-			resp = new Response<>(Response.NOT_FOUND, getMsg("queue.run.not_found"));
+			resp = new Response<>(Response.NOT_FOUND);
 		}
-		
-		// TODO: handle all error
-		// e.g. if queue doesn't exists
-		// if facilityId doesn't exists etc.
-		
 		return resp;
 	}
 }

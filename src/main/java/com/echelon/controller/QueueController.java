@@ -22,17 +22,17 @@ public class QueueController {
 	/////////////////////////////////CRUD Requests\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 	
 	@RequestMapping(method=RequestMethod.POST, value="facility/{facilityId}/queue")
-	public void addQueue(@RequestBody Queue queue, @PathVariable Long facilityId) {
-		queueService.addQueue(facilityId, queue);
+	public Response<Queue> addQueue(@RequestBody Queue queue, @PathVariable Long facilityId) {
+		return queueService.addQueue(facilityId, queue);
 	}
 	
 	@RequestMapping("/facility/{facilityId}/queue/{queueId}")
-	public Queue getQueue(@PathVariable Long facilityId, @PathVariable Long queueId) {
+	public Response<Queue> getQueue(@PathVariable Long facilityId, @PathVariable Long queueId) {
 		return queueService.getQueue(queueId);
 	}
 	@RequestMapping( method=RequestMethod.PUT, value="/facility/{facilityId}/queue")
-	public void updateQueue(@PathVariable Long facilityId, @RequestBody Queue queue) {
-		queueService.updateQueue(facilityId, queue);
+	public Response<Queue> updateQueue(@PathVariable Long facilityId, @RequestBody Queue queue) {
+		return queueService.updateQueue(facilityId, queue);
 	}
 	@RequestMapping( method=RequestMethod.DELETE, value="/facility/{facilityId}/queue/{queueId}")
 	public void deleteQueue(@PathVariable Long facilityId, @PathVariable Long queueId) {

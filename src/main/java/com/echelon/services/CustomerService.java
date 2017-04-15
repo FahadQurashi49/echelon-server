@@ -1,5 +1,6 @@
 package com.echelon.services;
 
+import com.echelon.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,17 +19,17 @@ public class CustomerService {
 			customerRepository.findByQueueId(queueId, new PageRequest(pageNo, size));
 	}
 	
-	public void addCustomer(Customer customer) {
-		customerRepository.save(customer);
+	public Response<Customer> addCustomer(Customer customer) {
+		return new Response<Customer>(customerRepository.save(customer));
 	}
 	
-	public Customer getCustomer (Long customerId) {
+	public Response<Customer> getCustomer (Long customerId) {
 		return 
-			customerRepository.findOne(customerId);
+			new Response<Customer>(customerRepository.findOne(customerId));
 	}
 	
-	public void updateCustomer(Customer customer) {
-		customerRepository.save(customer);
+	public Response<Customer> updateCustomer(Customer customer) {
+		 return	new Response<Customer>(customerRepository.save(customer));
 	}
 	
 	public void deleteCustomer(Long customerId) {

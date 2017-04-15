@@ -1,5 +1,6 @@
 package com.echelon.controller;
 
+import com.echelon.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,17 +19,17 @@ public class CustomerController {
 	private CustomerService customerService;
 	
 	@RequestMapping( method=RequestMethod.POST, value="/customer")
-	public void addCustomer (@RequestBody Customer customer) {
-		customerService.addCustomer(customer);
+	public Response<Customer> addCustomer (@RequestBody Customer customer) {
+		return customerService.addCustomer(customer);
 	}
 	
 	@RequestMapping("/customer/{id}")
-	public Customer getCustomer(@PathVariable Long id) {
+	public Response<Customer> getCustomer(@PathVariable Long id) {
 		return customerService.getCustomer(id);
 	}
 	@RequestMapping( method=RequestMethod.PUT, value="/customer")
-	public void updateCustomer(@RequestBody Customer customer) {
-		customerService.updateCustomer(customer);
+	public Response<Customer> updateCustomer(@RequestBody Customer customer) {
+		return customerService.updateCustomer(customer);
 	}
 	@RequestMapping( method=RequestMethod.DELETE, value="/customer/{id}")
 	public void deleteCustomer(@PathVariable Long id) {

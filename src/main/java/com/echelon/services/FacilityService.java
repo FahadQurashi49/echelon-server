@@ -1,5 +1,6 @@
 package com.echelon.services;
 
+import com.echelon.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,17 +19,16 @@ public class FacilityService {
 			facilityRepository.findAll(new PageRequest(pageNo, size));
 	}
 	
-	public void addFacility(Facility facility) {
-		facilityRepository.save(facility);
+	public Response<Facility> addFacility(Facility facility) {
+		return new Response<Facility>(facilityRepository.save(facility));
+	}
+
+	public Response<Facility> getFacility (Long facilityId) {
+		return new Response<Facility>(facilityRepository.findOne(facilityId));
 	}
 	
-	public Facility getFacility (Long facilityId) {		
-		return 
-			facilityRepository.findOne(facilityId);
-	}
-	
-	public void updateFacility(Facility facility) {
-		facilityRepository.save(facility);
+	public Response<Facility> updateFacility(Facility facility) {
+		return new Response<Facility>(facilityRepository.save(facility));
 	}
 	
 	public void deleteFacility(Long facilityId) {
