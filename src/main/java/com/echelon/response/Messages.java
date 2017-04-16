@@ -2,6 +2,7 @@ package com.echelon.response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +23,11 @@ public class Messages {
     }
 
     public String get(String code) {
-        return accessor.getMessage(code);
+        try {
+            return accessor.getMessage(code);
+        } catch (NoSuchMessageException ex) {
+            return "no message found with this id";
+        }
     }
 
 }

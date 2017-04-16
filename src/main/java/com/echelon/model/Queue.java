@@ -20,7 +20,9 @@ public class Queue {
 	private Long id;
 	private String name;
 	private Boolean isRunning;
-	private Long currentNumber;
+	private Long rear;
+	private Long front;
+
 	// add cascade for remove
 	@ManyToOne
 	@JsonIgnore
@@ -34,14 +36,16 @@ public class Queue {
 	public Queue() {
 		
 	}
-	public Queue(Long id, String name, Boolean isRunning, Long currentNumber, Facility facility) {
+
+	public Queue(Long id, String name, Boolean isRunning, Long rear, Long front, Facility facility) {
 		this.id = id;
 		this.name = name;
 		this.isRunning = isRunning;
-		this.currentNumber = currentNumber;
+		this.rear = rear;
+		this.front = front;
 		this.facility = facility;
 	}
-	
+
 	public Queue(Long id) {
 		this.id = id;
 	}
@@ -57,12 +61,6 @@ public class Queue {
 	public void setIsRunning(Boolean isRunning) {
 		this.isRunning = isRunning;
 	}
-	public Long getCurrentNumber() {
-		return currentNumber;
-	}
-	public void setCurrentNumber(Long currentNumber) {
-		this.currentNumber = currentNumber;
-	}
 	public Long getId() {
 		return id;
 	}	
@@ -72,12 +70,57 @@ public class Queue {
 	public Facility getFacility() {
 		return facility;
 	}
+	public Long getRear() {
+		return rear;
+	}
+
+	public void setRear(Long rear) {
+		this.rear = rear;
+	}
+
+	public Long getFront() {
+		return front;
+	}
+
+	public void setFront(Long front) {
+		this.front = front;
+	}
+
 	public void setFacility(Facility facility) {
 		this.facility = facility;
 	}
+
 	@Override
 	public String toString() {
-		return "Queue [id=" + id + ", name=" + name + ", isRunning=" + isRunning + ", currentNumber=" + currentNumber
+		return "Queue [id=" + id + ", name=" + name + ", isRunning=" + isRunning
 				+ "]";
 	}
+
+	/////////////////////////////////Business logic\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+	public void run() {
+		this.isRunning = true;
+		this.rear = this.front = 0L;
+	}
+	public void cancel() {
+		this.isRunning = false;
+		this.rear = this.front = null;
+		this.customers.forEach(customer -> {
+			customer.setQueue(null);
+			customer.setInQueue(false);
+			customer.setQueueNumber(null);
+		});	// my first use of java 8 lambda \O/
+	}
+	public void enqueue(Customer customer) {
+		if (customer != null) {
+			this.rear++;
+			customer.setQueueNumber(this.rear);
+			customer.setInQueue(true);
+			customer.setQueue(this);
+			this.customers.add(customer);
+		}
+	}
+
+
+
 }

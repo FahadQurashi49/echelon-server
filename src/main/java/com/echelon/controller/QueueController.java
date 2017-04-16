@@ -1,5 +1,6 @@
 package com.echelon.controller;
 
+import com.echelon.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.echelon.dao.QueueRepository;
 import com.echelon.model.Queue;
 import com.echelon.response.Response;
 import com.echelon.services.QueueService;
@@ -52,6 +52,17 @@ public class QueueController {
 	@RequestMapping(method=RequestMethod.GET, value="facility/{facilityId}/queue/{queueId}/run")
 	public Response<Queue> runQueue(@PathVariable Long facilityId, @PathVariable Long queueId) {
 		return queueService.runQueue(facilityId, queueId);		
+	}
+	@RequestMapping(method=RequestMethod.GET, value="facility/{facilityId}/queue/{queueId}/cancel")
+	public Response<Queue> cancelQueue(@PathVariable Long facilityId, @PathVariable Long queueId) {
+		return queueService.cancelQueue(facilityId, queueId);
+	}
+	@RequestMapping(method=RequestMethod.GET,
+			value="facility/{facilityId}/queue/{queueId}/customer/{customerId}/enqueue")
+	public Response<Queue> enqueueCustomer(@PathVariable Long facilityId,
+										   @PathVariable Long queueId,
+										   @PathVariable("customerId") Customer customer ) {
+		return queueService.enqueueCustomer(facilityId, queueId, customer);
 	}
 	
 }

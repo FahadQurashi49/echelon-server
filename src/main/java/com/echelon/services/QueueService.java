@@ -2,6 +2,7 @@ package com.echelon.services;
 
 import java.util.List;
 
+import com.echelon.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,12 +54,12 @@ public class QueueService {
 	}
 	
 	public Response<Queue> runQueue(Long facilityId, Long queueId) {
-		Response<Queue> resp= null;
+		Response<Queue> resp = null;
 		Queue queue = queueRepository.findByIdAndFacilityId(queueId, facilityId);		
 		if (queue != null) {
 			List<Queue> queues = queueRepository.findByFacilityIdAndIsRunning(facilityId, true);
 			if (queues.size() == 0) {			
-				queue.setIsRunning(true);				
+				queue.run();
 				updateQueue(facilityId, queue);
 				resp = new Response<>(getMsg("queue.run.running"), queue);				
 			} else if (queues.size() == 1) {
@@ -74,6 +75,48 @@ public class QueueService {
 			}
 		} else {
 			resp = new Response<>(Response.NOT_FOUND);
+		}
+		return resp;
+	}
+
+	public Response<Queue> cancelQueue (Long facilityId, Long queueId) {
+		Response<Queue> resp = null;
+		Queue queue = queueRepository.findByIdAndFacilityId(queueId, facilityId);
+		if (queue != null) {
+			if (queue.getIsRunning()) {
+				queue.cancel();
+				queueRepository.save(queue);
+				resp = new Response<>(queue);
+			} else {
+				resp = new Response<>(Response.CONFLICT, getMsg("queue.cancel.conflict"), queue);
+			}
+		} else {
+			resp = new Response<>(Response.NOT_FOUND);
+		}
+		return resp;
+	}
+
+	public Response<Queue> enqueueCustomer(Long facilityId, Long queueId, Customer customer) {
+		Response<Queue> resp = null;
+		Queue queue = queueRepository.findByIdAndFacilityId(queueId, facilityId);
+		if (queue != null) {
+			if (customer != null) {
+				if (queue.getIsRunning()) {
+					if (!customer.getInQueue()) {
+						queue.enqueue(customer);
+						queueRepository.save(queue);
+						resp = new Response<>(getMsg("queue.enqueue.enqueued"), queue);
+					} else {
+						resp = new Response<>(Response.CONFLICT, getMsg("queue.enqueue.customer_conflict"), customer.getQueue());
+					}
+				} else {
+					resp = new Response<Queue>(Response.CONFLICT, getMsg("queue.enqueue.queue_conflict"), queue);
+				}
+			} else {
+				resp = new Response<>(Response.NOT_FOUND, getMsg("queue.enqueue.customer_not_found") );
+			}
+		} else {
+			resp = new Response<>(Response.NOT_FOUND, getMsg("queue.enqueue.queue_not_found"));
 		}
 		return resp;
 	}

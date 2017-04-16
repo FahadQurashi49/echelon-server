@@ -16,7 +16,7 @@ public class Customer {
 	private Long id;
 	private String name;
 	private Long queueNumber;
-	
+	private Boolean isInQueue;
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="queue_id")
@@ -25,10 +25,12 @@ public class Customer {
 	public Customer() {
 		
 	}
-	public Customer(Long id, String name, Long queueNumber) {		
+
+	public Customer(Long id, String name, Long queueNumber, Boolean isInQueue) {
 		this.id = id;
 		this.name = name;
 		this.queueNumber = queueNumber;
+		this.isInQueue = isInQueue;
 	}
 
 	public String getName() {
@@ -60,7 +62,15 @@ public class Customer {
 	public void setQueue(Queue queue) {
 		this.queue = queue;
 	}
-	
+
+	public Boolean getInQueue() {
+		return isInQueue;
+	}
+
+	public void setInQueue(Boolean inQueue) {
+		isInQueue = inQueue;
+	}
+
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", name=" + name + ", queueNumber=" + queueNumber + "]";

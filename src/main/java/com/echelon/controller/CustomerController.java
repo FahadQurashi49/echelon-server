@@ -36,7 +36,7 @@ public class CustomerController {
 		customerService.deleteCustomer(id);
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="faclity/{facilityId}/queue/{queueId}/customer")
+	@RequestMapping(method=RequestMethod.GET, value="/facility/{facilityId}/queue/{queueId}/customer")
 	public Page<Customer> getAllQueueCustomers(
 			@PathVariable Long facilityId,
 			@PathVariable Long queueId,
