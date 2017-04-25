@@ -14,28 +14,28 @@ public class CustomerService extends BaseService{
 	@Autowired
 	private CustomerRepository customerRepository;
 
-	// done (Y)
+
 	public Customer addCustomer(Customer customer) {
 		return customerRepository.save(customer);
 	}
-	// done (Y)
+
 	public Customer getCustomer (Long customerId) {
 		Customer customer = customerRepository.findOne(customerId);
 		throwNotFoundException(customer,Customer.ENTITY_CODE, Customer.class.getSimpleName());
 		return customer;
 	}
-	// done (Y)
+
 	public Customer updateCustomer(Customer customer) {
 		 return	customerRepository.save(customer);
 	}
-	// done (Y)
+
 	public void deleteCustomer(Long customerId) {
 		customerRepository.delete(customerId);
 	}
 
 	/////////////////////////////////Business logic\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-	// done (Y)
+
 	public Page<Customer> getAllQueueCustomers(Long facilityId, Queue queue, int pageNo, int size) {
 		Page<Customer> customers = null;
 		if (queue != null && queue.getFacility().getId().equals(facilityId)) {

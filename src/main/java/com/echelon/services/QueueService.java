@@ -19,28 +19,28 @@ public class QueueService extends BaseService {
 	private QueueRepository queueRepository;
 	
 	/////////////////////////////////CRUD operations\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-	// done (Y)
+	
 	public Page<Queue> getAllQueues(Long facilityId, int pageNo, int size) {
 		return 
 			queueRepository.findByFacilityId(facilityId, new PageRequest(pageNo, size));
 	}
-	// done (Y)
+	
 	public Queue addQueue(Long facilityId, Queue queue) {
 		queue.setFacility(new Facility(facilityId));
 		return queueRepository.save(queue);
 	}
-	// done (Y)
+	
 	public Queue getQueue (Long facilityId, Long queueId) {
 		Queue queue = queueRepository.findByIdAndFacilityId(queueId, facilityId);
 		throwNotFoundException(queue,Queue.ENTITY_CODE, Queue.class.getSimpleName());
 		return queue;
 	}
-	// done (Y)
+	
 	public Queue updateQueue(Long facilityId, Queue queue) {
 		queue.setFacility(new Facility(facilityId));
 		return queueRepository.save(queue);
 	}
-	// done (Y)
+	
 	public void deleteQueue(Long queueId) {
 		queueRepository.delete(queueId);
 	}
@@ -49,7 +49,7 @@ public class QueueService extends BaseService {
 /////////////////////////////////Business logic\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 	
 
-	// done (Y)
+	
 	public Queue runQueue(Long facilityId, Long queueId) {
 		Queue queue = queueRepository.findByIdAndFacilityId(queueId, facilityId);		
 		if (queue != null) {
@@ -76,7 +76,7 @@ public class QueueService extends BaseService {
 		}
 		return queue;
 	}
-	// done (Y)
+	
 	public Queue cancelQueue (Long facilityId, Long queueId) {
 		Queue queue = queueRepository.findByIdAndFacilityId(queueId, facilityId);
 		if (queue != null) {
@@ -92,7 +92,7 @@ public class QueueService extends BaseService {
 
 		return queue;
 	}
-	// done (Y)
+	
 	public Queue enqueueCustomer(Long facilityId, Long queueId, Customer customer) {
 		Queue queue = queueRepository.findByIdAndFacilityId(queueId, facilityId);
 
