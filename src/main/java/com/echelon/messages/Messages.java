@@ -1,4 +1,4 @@
-package com.echelon.response;
+package com.echelon.messages;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -22,9 +22,18 @@ public class Messages {
         accessor = new MessageSourceAccessor(messageSource);
     }
 
-    public String get(String code) {
+    public String getMsg(String code) {
         try {
+
             return accessor.getMessage(code);
+        } catch (NoSuchMessageException ex) {
+            return "no message found with this id";
+        }
+    }
+    public String getMsg(String code, Object... args) {
+        try {
+
+            return accessor.getMessage(code, args);
         } catch (NoSuchMessageException ex) {
             return "no message found with this id";
         }

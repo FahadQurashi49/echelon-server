@@ -1,6 +1,5 @@
 package com.echelon.services;
 
-import com.echelon.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,27 +9,29 @@ import com.echelon.dao.FacilityRepository;
 import com.echelon.model.Facility;
 
 @Service
-public class FacilityService {
+public class FacilityService extends BaseService {
 	@Autowired
 	private FacilityRepository facilityRepository;
-	
+	// done (Y)
 	public Page<Facility> getAllFacilities(int pageNo, int size) {		
 		return 
 			facilityRepository.findAll(new PageRequest(pageNo, size));
 	}
-	
-	public Response<Facility> addFacility(Facility facility) {
-		return new Response<Facility>(facilityRepository.save(facility));
+	// done (Y)
+	public Facility addFacility(Facility facility) {
+		return facilityRepository.save(facility);
 	}
-
-	public Response<Facility> getFacility (Long facilityId) {
-		return new Response<Facility>(facilityRepository.findOne(facilityId));
+	// done (Y)
+	public Facility getFacility (Long facilityId) {
+		Facility facility = facilityRepository.findOne(facilityId);
+		throwNotFoundException(facility, Facility.ENTITY_CODE, Facility.class.getSimpleName());
+		return facility;
 	}
-	
-	public Response<Facility> updateFacility(Facility facility) {
-		return new Response<Facility>(facilityRepository.save(facility));
+	// done (Y)
+	public Facility updateFacility(Facility facility) {
+		return facilityRepository.save(facility);
 	}
-	
+	// done (Y)
 	public void deleteFacility(Long facilityId) {
 		facilityRepository.delete(facilityId);
 	}

@@ -8,14 +8,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Facility {
+	// for error code generation
+	@JsonIgnore
+	public static final int ENTITY_CODE = 1;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
+	@NotNull
+	@Size(min=2, max=30)
 	private String name;
 	
 	@JsonIgnore

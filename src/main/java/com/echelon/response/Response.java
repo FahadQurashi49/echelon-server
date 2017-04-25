@@ -1,5 +1,6 @@
 package com.echelon.response;
 
+@Deprecated
 public class Response<T> implements StatusCodes{
 	private static final String SUCCESS_MSG = "success";
 

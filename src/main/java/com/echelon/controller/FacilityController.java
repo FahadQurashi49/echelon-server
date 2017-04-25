@@ -1,6 +1,5 @@
 package com.echelon.controller;
 
-import com.echelon.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,22 +12,24 @@ import org.springframework.web.bind.annotation.RestController;
 import com.echelon.model.Facility;
 import com.echelon.services.FacilityService;
 
+import javax.validation.Valid;
+
 @RestController
 public class FacilityController {
 	@Autowired
 	private FacilityService facilityService;
 	
 	@RequestMapping( method=RequestMethod.POST, value="/facility")
-	public Response<Facility> addFacility (@RequestBody Facility facility) {
+	public Facility addFacility (@RequestBody @Valid Facility facility) {
 		return facilityService.addFacility(facility);
 	}
 	
 	@RequestMapping("/facility/{id}")
-	public Response<Facility> getFacility(@PathVariable Long id) {
+	public Facility getFacility(@PathVariable Long id) {
 		return facilityService.getFacility(id);
 	}
 	@RequestMapping( method=RequestMethod.PUT, value="/facility")
-	public Response<Facility> updateFacility(@RequestBody Facility facility) {
+	public Facility updateFacility(@RequestBody @Valid Facility facility) {
 		return facilityService.updateFacility(facility);
 	}
 	@RequestMapping( method=RequestMethod.DELETE, value="/facility/{id}")

@@ -10,16 +10,26 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
+@JsonIgnoreProperties(value = {"isRunning", "rear", "front"}, allowGetters = true)
 public class Queue {
+	// for error code generation
+	@JsonIgnore
+	public static final int ENTITY_CODE = 2;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
+	@NotNull
+	@Size(min=2, max=30)
 	private String name;
-	private Boolean isRunning;
+	private Boolean isRunning = false;
 	private Long rear;
 	private Long front;
 
@@ -70,6 +80,9 @@ public class Queue {
 	public Facility getFacility() {
 		return facility;
 	}
+	public void setFacility(Facility facility) {
+		this.facility = facility;
+	}
 	public Long getRear() {
 		return rear;
 	}
@@ -86,8 +99,12 @@ public class Queue {
 		this.front = front;
 	}
 
-	public void setFacility(Facility facility) {
-		this.facility = facility;
+	public List<Customer> getCustomers() {
+		return customers;
+	}
+
+	public void setCustomers(List<Customer> customers) {
+		this.customers = customers;
 	}
 
 	@Override
@@ -107,7 +124,7 @@ public class Queue {
 		this.rear = this.front = null;
 		this.customers.forEach(customer -> {
 			customer.setQueue(null);
-			customer.setInQueue(false);
+			customer.setIsInQueue(false);
 			customer.setQueueNumber(null);
 		});	// my first use of java 8 lambda \O/
 	}
@@ -115,7 +132,7 @@ public class Queue {
 		if (customer != null) {
 			this.rear++;
 			customer.setQueueNumber(this.rear);
-			customer.setInQueue(true);
+			customer.setIsInQueue(true);
 			customer.setQueue(this);
 			this.customers.add(customer);
 		}

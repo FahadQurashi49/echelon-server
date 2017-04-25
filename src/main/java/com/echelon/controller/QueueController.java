@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.echelon.model.Queue;
-import com.echelon.response.Response;
 import com.echelon.services.QueueService;
+
+import javax.validation.Valid;
 
 @RestController
 public class QueueController {
@@ -22,16 +23,16 @@ public class QueueController {
 	/////////////////////////////////CRUD Requests\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 	
 	@RequestMapping(method=RequestMethod.POST, value="facility/{facilityId}/queue")
-	public Response<Queue> addQueue(@RequestBody Queue queue, @PathVariable Long facilityId) {
+	public Queue addQueue(@RequestBody @Valid Queue queue, @PathVariable Long facilityId) {
 		return queueService.addQueue(facilityId, queue);
 	}
 	
 	@RequestMapping("/facility/{facilityId}/queue/{queueId}")
-	public Response<Queue> getQueue(@PathVariable Long facilityId, @PathVariable Long queueId) {
-		return queueService.getQueue(queueId);
+	public Queue getQueue(@PathVariable Long facilityId, @PathVariable Long queueId) {
+		return queueService.getQueue(facilityId, queueId);
 	}
 	@RequestMapping( method=RequestMethod.PUT, value="/facility/{facilityId}/queue")
-	public Response<Queue> updateQueue(@PathVariable Long facilityId, @RequestBody Queue queue) {
+	public Queue updateQueue(@PathVariable Long facilityId, @RequestBody @Valid Queue queue) {
 		return queueService.updateQueue(facilityId, queue);
 	}
 	@RequestMapping( method=RequestMethod.DELETE, value="/facility/{facilityId}/queue/{queueId}")
@@ -47,22 +48,21 @@ public class QueueController {
 		return queueService.getAllQueues(facilityId, page, size);
 	}
 	
-	/////////////////////////////////Business logic Requests\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	/////////////////////////////////Business logic Requests\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 	
 	@RequestMapping(method=RequestMethod.GET, value="facility/{facilityId}/queue/{queueId}/run")
-	public Response<Queue> runQueue(@PathVariable Long facilityId, @PathVariable Long queueId) {
+	public Queue runQueue(@PathVariable Long facilityId, @PathVariable Long queueId) {
 		return queueService.runQueue(facilityId, queueId);		
 	}
 	@RequestMapping(method=RequestMethod.GET, value="facility/{facilityId}/queue/{queueId}/cancel")
-	public Response<Queue> cancelQueue(@PathVariable Long facilityId, @PathVariable Long queueId) {
+	public Queue cancelQueue(@PathVariable Long facilityId, @PathVariable Long queueId) {
 		return queueService.cancelQueue(facilityId, queueId);
 	}
 	@RequestMapping(method=RequestMethod.GET,
 			value="facility/{facilityId}/queue/{queueId}/customer/{customerId}/enqueue")
-	public Response<Queue> enqueueCustomer(@PathVariable Long facilityId,
-										   @PathVariable Long queueId,
-										   @PathVariable("customerId") Customer customer ) {
+	public Queue enqueueCustomer(@PathVariable Long facilityId,
+								 @PathVariable Long queueId,
+								 @PathVariable("customerId") Customer customer ) {
 		return queueService.enqueueCustomer(facilityId, queueId, customer);
 	}
-	
 }

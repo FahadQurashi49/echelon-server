@@ -6,14 +6,24 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
+@JsonIgnoreProperties(value = {"queueNumber", "isInQueue"}, allowGetters = true)
 public class Customer {
+	// for error code generation
+	@JsonIgnore
+	public static final int ENTITY_CODE = 3;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
+	@NotNull
+	@Size(min=2, max=30)
 	private String name;
 	private Long queueNumber;
 	private Boolean isInQueue;
@@ -63,11 +73,11 @@ public class Customer {
 		this.queue = queue;
 	}
 
-	public Boolean getInQueue() {
+	public Boolean getIsInQueue() {
 		return isInQueue;
 	}
 
-	public void setInQueue(Boolean inQueue) {
+	public void setIsInQueue(Boolean inQueue) {
 		isInQueue = inQueue;
 	}
 
