@@ -60,9 +60,16 @@ public class QueueController {
 	}
 	@RequestMapping(method=RequestMethod.GET,
 			value="facility/{facilityId}/queue/{queueId}/customer/{customerId}/enqueue")
-	public Queue enqueueCustomer(@PathVariable Long facilityId,
-								 @PathVariable Long queueId,
-								 @PathVariable("customerId") Customer customer ) {
+	public Customer enqueueCustomer(@PathVariable Long facilityId,
+									@PathVariable Long queueId,
+									@PathVariable("customerId") Customer customer ) {
 		return queueService.enqueueCustomer(facilityId, queueId, customer);
+	}
+	@RequestMapping(method=RequestMethod.GET,
+			value="facility/{facilityId}/queue/{queueId}/customer/{customerId}/dequeue")
+	public Customer dequeueCustomer(@PathVariable Long facilityId,
+									@PathVariable Long queueId,
+									@PathVariable("customerId") Customer customer ) {
+		return queueService.dequeueCustomer(facilityId, queueId, customer);
 	}
 }

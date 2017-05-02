@@ -1,17 +1,16 @@
 package com.echelon.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@Table(
+		uniqueConstraints = @UniqueConstraint(
+				columnNames = {"queue_id", "queueNumber"})
+)
 @Entity
 @JsonIgnoreProperties(value = {"queueNumber", "isInQueue"}, allowGetters = true)
 public class Customer {
@@ -25,8 +24,8 @@ public class Customer {
 	@NotNull
 	@Size(min=2, max=30)
 	private String name;
-	private Long queueNumber;
-	private Boolean isInQueue;
+	private Long queueNumber = 0L;
+	private Boolean isInQueue = false;
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="queue_id")

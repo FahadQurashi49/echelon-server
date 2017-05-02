@@ -93,14 +93,14 @@ public class QueueService extends BaseService {
 		return queue;
 	}
 	
-	public Queue enqueueCustomer(Long facilityId, Long queueId, Customer customer) {
+	public Customer enqueueCustomer(Long facilityId, Long queueId, Customer customer) {
 		Queue queue = queueRepository.findByIdAndFacilityId(queueId, facilityId);
 
 		if (queue != null) {
 			if (customer != null) {
 				if (queue.getIsRunning()) {
 					if (!customer.getIsInQueue()) {
-						queue.enqueue(customer);
+						customer = queue.enqueue(customer);
 						queueRepository.save(queue);
 					} else {
 						throwStateConflictException("queue.enqueue.customer_conflict");
@@ -114,7 +114,34 @@ public class QueueService extends BaseService {
 		} else {
 			throwNotFoundException("queue.enqueue.queue_not_found");
 		}
-		return queue;
+		return customer;
+	}
+
+	public Customer dequeueCustomer(Long facilityId, Long queueId, Customer customer) {
+		Queue queue = queueRepository.findByIdAndFacilityId(queueId, facilityId);
+		if (queue != null) {
+			if (customer != null) {
+				if (queue.getIsRunning()) {
+					if (customer.getIsInQueue() && customer.getQueue().getId().equals(queue.getId())) {
+						if (customer.getQueueNumber().equals(queue.getFront() + 1)) {
+							customer = queue.dequeue(customer);
+							queueRepository.save(queue);
+						} else {
+							throwStateConflictException("queue.dequeue.not_in_front");
+						}
+					} else {
+						throwStateConflictException("queue.dequeue.customer_conflict");
+					}
+				} else {
+					throwStateConflictException("queue.dequeue.queue_conflict");
+				}
+			} else {
+				throwNotFoundException("queue.dequeue.customer_not_found");
+			}
+		} else {
+			throwNotFoundException("queue.dequeue.queue_not_found");
+		}
+		return customer;
 	}
 
 }

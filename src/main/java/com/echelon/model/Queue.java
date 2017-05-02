@@ -30,8 +30,8 @@ public class Queue {
 	@Size(min=2, max=30)
 	private String name;
 	private Boolean isRunning = false;
-	private Long rear;
-	private Long front;
+	private Long rear = 0L;
+	private Long front = 0L;
 
 	// add cascade for remove
 	@ManyToOne
@@ -117,18 +117,17 @@ public class Queue {
 
 	public void run() {
 		this.isRunning = true;
-		this.rear = this.front = 0L;
 	}
 	public void cancel() {
 		this.isRunning = false;
-		this.rear = this.front = null;
+		this.rear = this.front = 0L;
 		this.customers.forEach(customer -> {
 			customer.setQueue(null);
 			customer.setIsInQueue(false);
-			customer.setQueueNumber(null);
+			customer.setQueueNumber(0L);
 		});	// my first use of java 8 lambda \O/
 	}
-	public void enqueue(Customer customer) {
+	public Customer enqueue(Customer customer) {
 		if (customer != null) {
 			this.rear++;
 			customer.setQueueNumber(this.rear);
@@ -136,8 +135,18 @@ public class Queue {
 			customer.setQueue(this);
 			this.customers.add(customer);
 		}
+		return customer;
 	}
 
+	public Customer dequeue(Customer customer) {
+		if (customer != null) {
+			customer.setQueue(null);
+			customer.setQueueNumber(0L);
+			customer.setIsInQueue(false);
+			this.front++;
+		}
+		return customer;
+	}
 
 
 }
