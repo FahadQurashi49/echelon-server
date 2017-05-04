@@ -24,7 +24,7 @@ public class FacilityService extends BaseService {
 
 	public Facility getFacility (Long facilityId) {
 		Facility facility = facilityRepository.findOne(facilityId);
-		throwNotFoundException(facility, Facility.ENTITY_CODE, Facility.class.getSimpleName());
+		throwNotFoundException(facility, Facility.class);
 		return facility;
 	}
 

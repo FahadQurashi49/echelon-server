@@ -21,7 +21,7 @@ public class CustomerService extends BaseService{
 
 	public Customer getCustomer (Long customerId) {
 		Customer customer = customerRepository.findOne(customerId);
-		throwNotFoundException(customer,Customer.ENTITY_CODE, Customer.class.getSimpleName());
+		throwNotFoundException(customer,Customer.class);
 		return customer;
 	}
 
@@ -38,7 +38,8 @@ public class CustomerService extends BaseService{
 
 	public Page<Customer> getAllQueueCustomers(Long facilityId, Queue queue, int pageNo, int size) {
 		Page<Customer> customers = null;
-		if (queue != null && queue.getFacility().getId().equals(facilityId)) {
+		throwNotFoundException(queue, Queue.class);
+		if (queue.getFacility().getId().equals(facilityId)) {
 			customers = customerRepository.findByQueueId(queue.getId(), new PageRequest(pageNo, size));
 		} else {
 			throwNotFoundException("customer.queue_customers.queue_not_found");

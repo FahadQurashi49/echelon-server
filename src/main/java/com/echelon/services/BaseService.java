@@ -26,9 +26,14 @@ public abstract class BaseService extends Messages{
         throw new ResourceNotFoundException(getMsg(msgId, args));
 
     }
-    protected void throwNotFoundException(Object object, int entityCode, String className) {
-        if (object == null) {
-            throw new ResourceNotFoundException(getMsg("entity.not_found", entityCode,className));
+
+    protected void throwNotFoundException(Object object, Class entity) {
+        try {
+            if (object == null) {
+                throw new ResourceNotFoundException(getMsg("entity.not_found", entity.getDeclaredField("ENTITY_CODE").get(null), entity.getSimpleName()));
+            }
+        } catch (NoSuchFieldException | IllegalAccessException | SecurityException ex) {
+            throw new ResourceNotFoundException(getMsg("entity.not_found", 0, entity.getSimpleName()));
         }
     }
 }
