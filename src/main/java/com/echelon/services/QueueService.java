@@ -49,7 +49,14 @@ public class QueueService extends BaseService {
 	
 	public Queue runQueue(Long facilityId, Long queueId) {
 		Queue queue = getQueueByFacility(queueId, facilityId);
-		List<Queue> queues = queueRepository.findByFacilityIdAndIsRunning(facilityId, true);
+		if (!queue.getIsRunning()) {
+			queue.run();
+			updateQueue(facilityId, queue);
+		} else {
+			throwStateConflictException("queue.run.conflict");
+		}
+
+		/*List<Queue> queues = queueRepository.findByFacilityIdAndIsRunning(facilityId, true);
 		if (queues.size() == 0) {
 			queue.run();
 			updateQueue(facilityId, queue);
@@ -66,7 +73,7 @@ public class QueueService extends BaseService {
 							.map(q -> q.getId().toString())
 							.collect(Collectors.joining(";"));
 			throwStateConflictException("queue.run.multiple", msgArgs);
-		}
+		}*/
 		return queue;
 	}
 	
